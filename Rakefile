@@ -17,10 +17,11 @@ Jeweler::Tasks.new do |gem|
   gem.name = "bio-plates"
   gem.homepage = "http://github.com/stveep/bioruby-plates"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Methods for handling multiwell plate annotations}
+  gem.description = %Q{Methods for handling multiwell plate annotations, includes ranges and quadrants}
   gem.email = "spettitt@gmail.com"
   gem.authors = ["stveep"]
+  gem.version = "0.1.0"
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
