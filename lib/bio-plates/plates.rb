@@ -1,7 +1,7 @@
 class BioPlates
   require 'csv'
   def self.read(file)
-    plates = Hash.new{|h,k| h[k] = BioPlates::Plate.new}
+    plates = Hash.new{|h,k| h[k] = BioPlates::Plate.new(k)}
     csv = CSV.read(File.open(file), headers: true, header_converters: :symbol)
     unless csv.headers.include? :well || ((csv.headers.include? :row) && (csv.headers.include? :column))
       raise "Column headers must include either Well, or Row and Column"
@@ -16,9 +16,9 @@ class BioPlates
   end
 
   # form quadrants from four plate Objects
-  def self.quadrants(plates)
+  def self.quadrants(plates,newname="QuadrantPlate")
     if plates.is_a? Hash
-      plates = plates.values
+      plates = plates.sort.to_h.values
     end
     unless plates.length == 4
       warn "Number of plates supplied should be four; truncating/reusing"
@@ -34,8 +34,7 @@ class BioPlates
         end
       end
     end
-    puts plates
-    newplate = BioPlates::Plate.new
+    newplate = BioPlates::Plate.new(newname)
     plates.each.with_index do |plateobj, plateno|
       plateno = plateno + 1
       modplate = plateobj.dup
@@ -56,7 +55,8 @@ end
 class BioPlates::Plate
   attr_accessor :wells, :name, :rows, :columns
 
-  def initialize
+  def initialize(name="")
+    @name = name
     @wells = []
   end
 
@@ -74,11 +74,36 @@ class BioPlates::Plate
 
   # Add leading zeroes to column strings
   def add_leading_zeroes!
-    max = self.wells.dup.sort_by!{|x| x.column.length}.pop.column.length
-    self.wells.map!{|x| y = ""; (max - x.column.length).times{y << "0"} ; x.column = y + x.column; x }
+    max = self.wells.dup.sort_by!{|x| x.column.to_s.length}.pop.column.to_s.length
+    self.wells.map!{|x| y = ""; (max - x.column.to_s.length).times{y << "0"} ; x.column = y + x.column.to_s; x }
     self
   end
 
+  def dump(file="output.csv",head=true,format="csv")
+    #Column titles required:
+    columns = Hash.new{|h,k| h[k] = 1}
+    self.wells.each do |well|
+      well.annotation.each{|k,v| columns[k] += 1}
+    end
+    CSV.open(file,"wb") do |csv|
+      if head=true
+        csv << ["Plate","Row","Column"] + columns.keys
+        head = false
+      end
+      self.wells.each do |well|
+        line = [self.name,well.row,well.column]
+        columns.keys.each do |col_title|
+          if well.annotation.keys.include?(col_title)
+            line << well.annotation[col_title]
+          else
+            line << 0
+          end
+        end
+      csv << line
+      end
+    end
+
+  end
 
 end
 
@@ -101,7 +126,7 @@ class BioPlates::Plate::Well
       @column = m[:column]
     end
     # NB annotation includes the original well annotation
-    @annotation = hash.delete_if{|k,f| [:row, :column, :plate, :well].include? k}
+    @annotation = hash.delete_if{|k,f| [:row, :column, :plate, :well].include? k}.to_h
   end
 
   def index!
@@ -111,7 +136,6 @@ class BioPlates::Plate::Well
   def quadrantize!(plate)
     (plate == 2 || plate == 4) ? inc = 1 : inc = 0
     (plate == 3 || plate == 4) ? rowinc = 1 : rowinc = 0
-    puts self.inspect
     @column = (@column.to_i + [*0..@@ncol][@column.to_i-1]+inc).to_s
     @row = (@row.ord + [*0..@@nrow][@row.upcase.ord-65]+rowinc).chr # 65 = ASCII "A"
     self

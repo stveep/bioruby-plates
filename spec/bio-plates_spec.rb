@@ -14,9 +14,10 @@ describe "BioPlates" do
 
     it "converts Well to Row and Column if required" do
       p = BioPlates.read("spec/fixtures/emptyrowcol.csv")
-      expect(p.first[1].wells[1].row).to eq "A"
+      expect(p.first[1].wells.first.row).to eq "A"
       expect(p.first[1].wells.first.column).to eq "01"
     end
+
   end
 
   context "When fewer than four plates are supplied" do
