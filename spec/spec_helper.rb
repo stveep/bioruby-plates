@@ -25,5 +25,8 @@ require 'bio-plates'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 RSpec.configure do |config|
-
+  config.before(:suite) do 
+    fixtures_dir = File.join(File.dirname(__FILE__),'fixtures')
+  end
 end
+
