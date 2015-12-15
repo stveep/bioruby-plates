@@ -11,4 +11,5 @@ group :development, :test  do
   gem "bundler", "~> 1.10"
   gem "rdoc", "~> 3.12"
   gem "fakefs", "~> 0.6"
+  gem "simplecov", "~> 0.10"
 end
