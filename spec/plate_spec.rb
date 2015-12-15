@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'fakefs/spec_helpers'
 
 describe BioPlates::Plate do
 
@@ -40,13 +41,22 @@ describe BioPlates::Plate do
       p96 = BioPlates.read("spec/fixtures/4x96.csv")
       @plate = p96["Plate1"]
     end
+
     it "outputs a CSV file" do
       expect(CSV).to receive(:open)
       @plate.dump
     end
-    it "includes arbitrary well annotations" do
-      expect(csv).to receive(:add_row).with ["Plate","Row","Column","Drug","Conc"]
+
+    it "is of the correct length" do
+      expect_any_instance_of(CSV).to receive(:<<).exactly(97).times
       @plate.dump
+    end
+
+    it "includes arbitrary well annotations" do
+      include FakeFS::SpecHelpers
+      @plate.dump("spec/tmp/output.txt")
+      output = File.open("spec/tmp/output.txt", &:readline)
+      expect(output.chomp).to eq "Plate,Row,Column,drug,conc"
     end
   end
 end

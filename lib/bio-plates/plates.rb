@@ -86,7 +86,7 @@ class BioPlates::Plate
       well.annotation.each{|k,v| columns[k] += 1}
     end
     CSV.open(file,"wb") do |csv|
-      if head=true
+      if head
         csv << ["Plate","Row","Column"] + columns.keys
         head = false
       end
