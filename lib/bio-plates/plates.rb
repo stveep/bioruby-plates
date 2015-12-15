@@ -28,9 +28,10 @@ class BioPlates
         i = 0
         until plates.length == 4 do
           duplicate = plates[i].dup
-          duplicate.wells.map!(&:dup)
+          duplicate.wells = duplicate.wells.map(&:dup)
           plates << duplicate
-          i += 1
+	  # Keep incrementing as long as there are still supplied plates, else reset
+          i < plates.length ? i += 1 : i = 0
         end
       end
     end
@@ -96,6 +97,7 @@ class BioPlates::Plate
           if well.annotation.keys.include?(col_title)
             line << well.annotation[col_title]
           else
+	    # Any wells without value for an annotation get a zero
             line << 0
           end
         end

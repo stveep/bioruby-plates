@@ -22,11 +22,10 @@ describe "BioPlates" do
 
   context "When fewer than four plates are supplied" do
     p96 = BioPlates.read("spec/fixtures/4x96.csv")
-    p384 = BioPlates.read("spec/fixtures/384.csv")
     twoplates = {"Plate1" => p96["Plate1"].dup,"Plate2" => p96["Plate2"].dup}
-    p384.first[1].wells.map(&:index!)
     it "warns and re-uses previous plates" do
-      expect(BioPlates.quadrants(twoplates)).to receive(:warn)
+      expect(BioPlates).to receive(:warn)
+      expect(BioPlates.quadrants(twoplates).wells.last.annotation[:drug]).to eq "si-last-p2"
     end
   end
 

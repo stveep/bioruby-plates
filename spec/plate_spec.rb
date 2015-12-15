@@ -6,9 +6,10 @@ describe BioPlates::Plate do
 
   context "accessing wells by row and column" do
     before(:all) do
-      p96 = BioPlates.read("spec/fixtures/4x96.csv")
+      p96 = BioPlates.read(File.join(File.dirname(__FILE__),"fixtures","4x96.csv"))
       @plate = p96["Plate1"]
     end
+    puts @plate
     it "returns a hash of arrays of well object, by column" do
       expect(@plate.columns.class).to be Hash
       expect(@plate.columns.first[1][0].class).to be BioPlates::Plate::Well
