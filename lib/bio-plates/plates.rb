@@ -140,6 +140,8 @@ class BioPlates::Plate::Well
   end
 
   def quadrantize!(plate)
+    self.index! unless @well
+    @annotation[:original] = @well
     (plate == 2 || plate == 4) ? inc = 1 : inc = 0
     (plate == 3 || plate == 4) ? rowinc = 1 : rowinc = 0
     @column = (@column.to_i + [*0..@@ncol][@column.to_i-1]+inc).to_s

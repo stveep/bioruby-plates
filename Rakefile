@@ -21,7 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Methods for handling multiwell plate annotations, includes ranges and quadrants}
   gem.email = "spettitt@gmail.com"
   gem.authors = ["stveep"]
-  gem.version = "0.1.0"
+  gem.version = "0.2.0"
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
