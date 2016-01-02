@@ -61,6 +61,10 @@ class BioPlates::Plate
     @wells = []
   end
 
+  def each
+    @wells.each
+  end
+
   def rows
     @rows = Hash.new{|h,k| h[k] = []}
     @wells.each{|well| @rows[well.row] << well}

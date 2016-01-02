@@ -37,4 +37,5 @@ describe "BioPlates" do
       expect(BioPlates.quadrants(p96).wells.map{|w| w.well}).to eq p384.first[1].wells.map{|w| w.well}
     end
   end
+
 end
