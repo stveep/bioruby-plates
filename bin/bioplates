@@ -43,9 +43,12 @@ class BioPlatesCLI < Thor
   ...
   Plate2,A01,,,si1,15
   Plate2,A02,,,si1,15
-  Plate2,A03,,,si1,15"
+  Plate2,A03,,,si1,15\n"
+  end
 
-
+  option :output
+  def annotate (annotation)
+    output = options[:output] || "annotation_output.csv"
   end
 
 
