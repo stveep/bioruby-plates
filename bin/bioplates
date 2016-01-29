@@ -3,8 +3,9 @@ require 'bio-plates'
 require 'thor'
 
 class BioPlatesCLI < Thor
-  desc "quadrants [--output=output.csv] PLATE1.csv PLATE2.csv ...", "convert 4x96-well plate annotations to a 384-well plate"
+  desc "quadrants [--output=output.csv --newname='My Plate'] PLATE1.csv PLATE2.csv ...", "convert 4x96-well plate annotations to a 384-well plate"
   option :output
+  option :newname
   def quadrants(*plates)
     # read files and merge
     plate_array = []
@@ -13,7 +14,37 @@ class BioPlatesCLI < Thor
       BioPlates.read(plate).each{|k,v| plate_array << v}
     end
     output = options[:output] || "output.csv"
-    BioPlates.quadrants(plate_array).dump(output)
+    BioPlates.quadrants(plate_array, newname).dump(output)
+  end
+
+  desc "example", "Show example plate config"
+  def example
+  puts "Input as comma-separated values, must have a column headed Plate containing plate name, and either a well column Well (e.g. A01 or B4) or two further columns with Row and Column (A,3)"
+  puts "Any number of further columns can be specified for annotations"
+  print "
+  Plate,Well,Row,Column,siRNA,Conc
+  Plate1,,A,1,si1,5
+  Plate1,,A,2,si2,5
+  Plate1,,A,3,si3,5
+  Plate1,,A,4,si4,5
+  Plate1,,A,5,si5,5
+  Plate1,,A,6,si6,5
+  Plate1,,A,7,si7,5
+  Plate1,,A,8,si8,5
+  Plate1,,A,9,si9,5
+  Plate1,,A,10,si10,5
+  Plate1,,A,11,si11,5
+  Plate1,,A,12,si12,5
+  Plate1,,B,1,si1,5
+  Plate1,,B,1,si1,5
+  Plate1,,B,1,si1,5
+  Plate1,,B,1,si1,5
+  ...
+  Plate2,A01,,,si1,15
+  Plate2,A02,,,si1,15
+  Plate2,A03,,,si1,15"
+
+
   end
 
 

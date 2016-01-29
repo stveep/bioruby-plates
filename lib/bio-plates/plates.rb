@@ -90,6 +90,7 @@ class BioPlates::Plate
     self.wells.each do |well|
       well.annotation.each{|k,v| columns[k] += 1}
     end
+    columns.delete(:plate) # Remove original plate annotation
     CSV.open(file,"wb") do |csv|
       if head
         csv << ["Plate","Row","Column"] + columns.keys
@@ -132,7 +133,7 @@ class BioPlates::Plate::Well
       @column = m[:column]
     end
     # NB annotation includes the original well annotation
-    @annotation = hash.delete_if{|k,f| [:row, :column, :plate, :well].include? k}.to_h
+    @annotation = hash.delete_if{|k,f| [:row, :column, :well].include? k}.to_h
   end
 
   def index!
@@ -141,7 +142,9 @@ class BioPlates::Plate::Well
 
   def quadrantize!(plate)
     self.index! unless @well
-    @annotation[:original] = @well
+    @annotation[:original_well] = @well
+    @annotation[:original_plate] = @annotation[:plate]
+    @annotation.delete(:plate) # Remove so no conflict with new plate
     (plate == 2 || plate == 4) ? inc = 1 : inc = 0
     (plate == 3 || plate == 4) ? rowinc = 1 : rowinc = 0
     @column = (@column.to_i + [*0..@@ncol][@column.to_i-1]+inc).to_s
