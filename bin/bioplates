@@ -3,7 +3,7 @@ require 'bio-plates'
 require 'thor'
 
 class BioPlatesCLI < Thor
-  desc "quadrants [--output=output.csv --newname='My Plate'] PLATE1.csv PLATE2.csv ...", "convert 4x96-well plate annotations to a 384-well plate"
+  desc "quadrants [--output=output.csv --newname='QuadrantPlate'] PLATE1.csv PLATE2.csv ...", "convert 4x96-well plate annotations to a 384-well plate"
   option :output
   option :newname
   def quadrants(*plates)
@@ -14,6 +14,7 @@ class BioPlatesCLI < Thor
       BioPlates.read(plate).each{|k,v| plate_array << v}
     end
     output = options[:output] || "output.csv"
+    newname = options[:newname] || "QuadrantPlate"
     BioPlates.quadrants(plate_array, newname).dump(output)
   end
 
