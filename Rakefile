@@ -22,7 +22,8 @@ Jeweler::Tasks.new do |gem|
   gem.email = "spettitt@gmail.com"
   gem.authors = ["Steve Pettitt"]
   gem.version = "0.2.0"
-  gem.executables = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) } 
+  gem.executables = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.required_ruby_version = '>= 2.1.0'
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
