@@ -9,14 +9,14 @@ Note: this software is under active development!
 ## Installation
 
 ```sh
-gem install bioruby-plates
+gem install bio-plates
 ```
 
 ## Usage
 Command line (currently only rearrangement of 96-well plates into a 384-well plate in quadrants):
 
 ```sh
-gem install bioruby-plates
+gem install bio-plates
 
 bioplates example
 bioplates quadrants [--output=output.csv --newname='My Plate'] PLATE1.csv PLATE2.csv ...  # convert 4x96-well plate annotations to a 384-well plate
@@ -52,9 +52,36 @@ Plate4,A6,PALB2,olaparib,50
 ```
 
 ```sh
-bioplates
+bioplates quadrants --output=384.csv --newname="Screen Plate" input.csv
 ```
 
+```csv
+Plate,Row,Column,sirna,drug,concentration,original_well,original_plate
+Screen Plate,A,01,PLK1,olaparib,0,A1,Plate1
+Screen Plate,A,02,PLK1,olaparib,0,A1,Plate2
+Screen Plate,A,03,siCON,olaparib,1,A2,Plate1
+Screen Plate,A,04,siCON,olaparib,1,A2,Plate2
+Screen Plate,A,05,Allstar,olaparib,5,A3,Plate1
+Screen Plate,A,06,Allstar,olaparib,5,A3,Plate2
+Screen Plate,A,07,Mock,olaparib,10,A4,Plate1
+Screen Plate,A,08,Mock,olaparib,10,A4,Plate2
+Screen Plate,A,09,BRCA1,olaparib,20,A5,Plate1
+Screen Plate,A,10,ATR,olaparib,20,A5,Plate2
+Screen Plate,A,11,TP53,olaparib,50,A6,Plate1
+Screen Plate,A,12,ATM,olaparib,50,A6,Plate2
+Screen Plate,B,01,PLK1,olaparib,0,A1,Plate3
+Screen Plate,B,02,PLK1,olaparib,0,A1,Plate4
+Screen Plate,B,03,siCON,olaparib,1,A2,Plate3
+Screen Plate,B,04,siCON,olaparib,1,A2,Plate4
+Screen Plate,B,05,Allstar,olaparib,5,A3,Plate3
+Screen Plate,B,06,Allstar,olaparib,5,A3,Plate4
+Screen Plate,B,07,Mock,olaparib,10,A4,Plate3
+Screen Plate,B,08,Mock,olaparib,10,A4,Plate4
+Screen Plate,B,09,PARP1,olaparib,20,A5,Plate3
+Screen Plate,B,10,BRCA2,olaparib,20,A5,Plate4
+Screen Plate,B,11,ARID1A,olaparib,50,A6,Plate3
+Screen Plate,B,12,PALB2,olaparib,50,A6,Plate4
+```
 
 In a script:
 ```ruby
