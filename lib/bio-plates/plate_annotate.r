@@ -118,5 +118,5 @@ annotate_plate <- function(df,type=96,plate=1,area=2,condition=3,value=4) {
 	red <- red[!apply(red,1,function(x) any(is.na(x))),]
 	# Add leading zeros and make a Well column by combining row + zerocolumn
 	red$Well <- paste(red$Row, sapply(red$Column,add_zero_to_single),sep="")
-	red
+	red[order(red$Row,as.integer(red$Column)),]
 }
