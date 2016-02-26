@@ -1,6 +1,8 @@
+# TODO: Allow empty range field, Allow plate ranges
+#
 wellrange <- function(range,first="row"){
 	#Check format
-	if (!grepl("[A-Za-z]\\d+-[A-Za-z]\\d+",range)) {
+	if (!grepl("[A-Za-z]+\\d+-[A-Za-z]+\\d+",range)) {
 		warning("Range must be of format A2-C4\n")
 	}
 	#Split out the start and end of the range
@@ -12,7 +14,9 @@ wellrange <- function(range,first="row"){
 	range_start_col = as.integer(sub("[A-Za-z]+","",range_start))
 	range_end_row = toupper(sub("\\d+","",range_end))
 	range_end_col = as.integer(sub("[A-Za-z]+","",range_end))
-	row_range = LETTERS[which(LETTERS==range_start_row):which(LETTERS==range_end_row)]
+	# Append A for 1536 well plates
+	letters = c(LETTERS,paste("A",LETTERS,sep=""))
+	row_range = letters[which(letters==range_start_row):which(letters==range_end_row)]
 	col_range = seq(from=range_start_col, to=range_end_col)
 
 	if (first=="row") {
@@ -36,7 +40,8 @@ wellrange <- function(range,first="row"){
 	#First row has NA values
 	output <- output[-1,]
 	#Sort by first then second (i.e. row then column default)
-	output[order(output[,1],output[,2]),]
+	#nchar needed to handle AA, AB... rows
+	output[order(nchar(output[,1]),output[,1],as.integer(output[,2])),]
 }
 
 condition_wells <- function(wells,cname,value) {
@@ -65,6 +70,10 @@ annotate_plate <- function(df,type=96,plate=1,area=2,condition=3,value=4) {
 	} else {
 		if (type == 384) {
 			fullplate <- "A1-P24"
+		} else {
+			if (type == 1536) {
+				fullplate <- "A1-AF48"
+			}
 		}
 	}
 	wells = wellrange(fullplate)
@@ -74,7 +83,6 @@ annotate_plate <- function(df,type=96,plate=1,area=2,condition=3,value=4) {
 
 	# If Plates field is empty, apply to all plates
 	plate_empty <- df[is.na(df[,plate]),]
-
 	if (nrow(plate_empty) != 0) {
 	# Remove old empty plate rows
 		df <- df[!is.na(df[,plate]),]
@@ -87,6 +95,9 @@ annotate_plate <- function(df,type=96,plate=1,area=2,condition=3,value=4) {
 		df <- do.call(rbind,new_rows)
 
 	}
+	plate_ranges <- df[grep("-",df[,plate]),]
+	# TODO: get range, make duplicate DF rows for each plate in range (as above)
+
 	# Remove any lines where the condition or value is NA
 
 	# Set up the plates data frame
@@ -118,5 +129,5 @@ annotate_plate <- function(df,type=96,plate=1,area=2,condition=3,value=4) {
 	red <- red[!apply(red,1,function(x) any(is.na(x))),]
 	# Add leading zeros and make a Well column by combining row + zerocolumn
 	red$Well <- paste(red$Row, sapply(red$Column,add_zero_to_single),sep="")
-	red[order(red$Row,as.integer(red$Column)),]
+	red[order(nchar(red$Row),red$Row,as.integer(red$Column)),]
 }

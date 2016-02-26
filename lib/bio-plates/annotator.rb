@@ -4,13 +4,15 @@ class BioPlates::Annotator
   require 'rinruby'
 
   class << self
-    attr_accessor :annotate_lib
+    attr_accessor :annotate_lib, :sep
   end
+  @sep = "\t"
   @annotate_lib = File.join(File.dirname(__FILE__),"plate_annotate.r")
 
   def self.read (file)
     R.annofile = file
-    R.eval "annofile = read.table(annofile,head=T)"
+    R.field_sep = BioPlates::Annotator.sep
+    R.eval "annofile = read.table(annofile,head=T,sep=field_sep)"
   end
 
   def self.annotate (file,outfile)

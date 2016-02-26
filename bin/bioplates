@@ -46,7 +46,7 @@ class BioPlatesCLI < Thor
   Plate2,A03,,,si1,15\n"
   end
 
-  desc "annotate", "Annotate a plate given well ranges. For example of format, run bioplates example_annotate. Outputs a plate layout by well as CSV."
+  desc "annotate [--output annotation_output.csv] annotation_file.txt", "Annotate a plate given well ranges. For example of format, run bioplates example_annotate. Outputs a plate layout by well as CSV."
   option :output
   def annotate (annotation)
     output = options[:output] || "annotation_output.csv"
@@ -55,6 +55,7 @@ class BioPlatesCLI < Thor
 
   desc "example_annotate", "Print example annotation."
   def example_annotate
+    puts "Example tab-separated annotation file:"
     print "Plate	Area	Condition	Value
 1	A1-B12	siRNA	PLK1
 1	A1-B6	drug	olaparib

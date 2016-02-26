@@ -21,7 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Methods for handling multiwell plate annotations, includes ranges and quadrants}
   gem.email = "spettitt@gmail.com"
   gem.authors = ["Steve Pettitt"]
-  gem.version = "0.2.0"
+  gem.version = "0.2.1"
   gem.executables = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) } 
   # dependencies defined in Gemfile
 end
