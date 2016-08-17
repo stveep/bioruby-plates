@@ -4,21 +4,42 @@ require 'fakefs/spec_helpers'
 describe BioPlates::Annotator do
 
   it "reads an annotation file into R as variable annofile" do
-    f = BioPlates::Annotator.read("spec/fixtures/annotation.txt")
+    BioPlates::Annotator.read("spec/fixtures/annotation.txt")
     expect {R.eval "annofile"}.to output(/annofile
-   Plate   Area Condition    Value
-1      1 A1-B12     siRNA     PLK1
-2      1  A1-B6      drug olaparib
-3      1 A7-B12      drug     DMSO
-4      2 A1-B12     siRNA   siCON1
-5      2  A1-B6      drug olaparib
-6      2 A7-B12      drug     DMSO
-7      3 A1-B12     siRNA  Allstar
-8      3  A1-B6      drug olaparib
-9      3 A7-B12      drug     DMSO
-10     4 A1-B12     siRNA    BRCA1
-11     4  A1-B6      drug olaparib
-12     4 A7-B12      drug     DMSO/).to_stdout
+\s+Plate\s+Area\s+Condition\s+Value
+1\s+1\s+A1-B12\s+siRNA\s+PLK1
+2\s+1\s+A1-B6\s+drug\s+olaparib
+3\s+1\s+A7-B12\s+drug\s+DMSO
+4\s+2\s+A1-B12\s+siRNA\s+siCON1
+5\s+2\s+A1-B6\s+drug\s+olaparib
+6\s+2\s+A7-B12\s+drug\s+DMSO
+7\s+3\s+A1-B12\s+siRNA\s+Allstar
+8\s+3\s+A1-B6\s+drug\s+olaparib
+9\s+3\s+A7-B12\s+drug\s+DMSO
+10\s+4\s+A1-B12\s+siRNA\s+BRCA1
+11\s+4\s+A1-B6\s+drug\s+olaparib
+12\s+4\s+A7-B12\s+drug\s+DMSO
+13\s+5\s+A1-AF23\s+drug\s+steves\s+drug/).to_stdout
+
+  end
+
+  it "reads an excel annotation file into R" do
+    BioPlates::Annotator.read("spec/fixtures/annotation.xlsx")
+    expect {R.eval "annofile"}.to output(/annofile
+\s+Plate\s+Area\s+Condition\s+Value
+1\s+1\s+A1-B12\s+siRNA\s+PLK1
+2\s+1\s+A1-B6\s+drug\s+olaparib
+3\s+1\s+A7-B12\s+drug\s+DMSO
+4\s+2\s+A1-B12\s+siRNA\s+siCON1
+5\s+2\s+A1-B6\s+drug\s+olaparib
+6\s+2\s+A7-B12\s+drug\s+DMSO
+7\s+3\s+A1-B12\s+siRNA\s+Allstar
+8\s+3\s+A1-B6\s+drug\s+olaparib
+9\s+3\s+A7-B12\s+drug\s+DMSO
+10\s+4\s+A1-B12\s+siRNA\s+BRCA1
+11\s+4\s+A1-B6\s+drug\s+olaparib
+12\s+4\s+A7-B12\s+drug\s+DMSO
+13\s+5\s+A1-AF23\s+drug\s+steves\s+drug/).to_stdout
 
   end
 
