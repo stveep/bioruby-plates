@@ -7,10 +7,6 @@
 
 language: r
 sudo: false
-r:
-  - 3.2.0
-  - 3.3.0
-
 cache: packages
 
 language: ruby
