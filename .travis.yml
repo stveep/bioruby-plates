@@ -5,11 +5,10 @@
 # #   https://github.com/craigcitro/r-travis/wiki
 
 
-language: r
-sudo: false
-cache: packages
 
 language: ruby
+before_install:
+  - R
 rvm:
   - 2.1.0
   - 2.2.0
