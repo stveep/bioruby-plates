@@ -13,7 +13,7 @@ class BioPlates::Annotator
     R.annofile = file
     R.field_sep = BioPlates::Annotator.sep
     if file.match /\.xls[xm]?\z/
-      R.eval "if(require('readxl') == FALSE) { install.packages('readxl') }"
+      R.eval "if(require('readxl') == FALSE) { install.packages('readxl', repos='http://cran.us.r-project.org') }"
       R.eval "annofile = read_excel(annofile,col_names=TRUE)" 
     else
       R.eval "annofile = read.table(annofile,head=T,sep=field_sep)"
