@@ -1,7 +1,36 @@
+# Sample .travis.yml for R projects: http://jtleek.com/protocols/travis_bioc_devel/
+# #
+# # See README.md for instructions, or for more configuration options,
+# # see the wiki:
+# #   https://github.com/craigcitro/r-travis/wiki
+
+language: c
+sudo: required
+
+before_install:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
+install:
+  - ./travis-tool.sh install_deps
+script: ./travis-tool.sh run_tests
+
+after_failure:
+  - ./travis-tool.sh dump_logs
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+language: r
+cache: packages
+
 language: ruby
 rvm:
   - 2.1.0
   - 2.2.0
+  - 2.2.2
 
 # - rbx-19mode
 #  - 1.8.7

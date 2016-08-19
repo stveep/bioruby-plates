@@ -12,12 +12,32 @@ Note: this software is under active development!
 gem install bio-plates
 ```
 
-## Usage
-Command line (currently only rearrangement of 96-well plates into a 384-well plate in quadrants):
+## Command line usage
+
+
+### Produce table of plate annotations
+```sh
+# Show example annotation file layout
+# e.g.
+#Plate	Area	Condition	Value
+#1	A1-B12	siRNA	PLK1
+bioplates example_annotate
+
+# Convert ranges to a CSV file with individual well annotations
+bioplates annotate --output annotation.csv layout.tsv
+
+# =>
+#Row,Column,Plate,siRNA,Well
+#A,1,1,PLK1,A01
+#A,2,1,PLK1,A02
+#...
+```
+
+
+
+### Rearrangement of 96-well plates into 384-well, in "quadrants"
 
 ```sh
-gem install bio-plates
-
 bioplates example
 bioplates quadrants [--output=output.csv --newname='My Plate'] PLATE1.csv PLATE2.csv ...  # convert 4x96-well plate annotations to a 384-well plate
 ```
@@ -83,7 +103,7 @@ Screen Plate,B,11,ARID1A,olaparib,50,A6,Plate3
 Screen Plate,B,12,PALB2,olaparib,50,A6,Plate4
 ```
 
-In a script:
+## Usage in a script:
 ```ruby
 require 'bio-plates'
 BioPlates.read("plate.csv")
